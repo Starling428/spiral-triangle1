@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	//"./bresenham"
 	"image"
 	"image/color"
 	"image/png"
 	"math"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -26,6 +28,11 @@ func main() {
 			img.Set(x, y, color.White)
 		}
 	}
+	fmt.Println(os.Args[0])
+	if len(os.Args) < 2 {
+		os.Exit(420)
+	}
+
 	//col := color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	/*	for i:=0.0; i < 2*math.Pi*170; i+=0.001 {
 			img.Set(int(i),   int(math.Sin(0.035*i)*350+500)	  , color.RGBA{R: 255, A: 255})
@@ -36,17 +43,21 @@ func main() {
 			//fmt.Println(fmt.Sprint(int(math.Sin(i)*40+100)))
 		}
 	*/
-	degree := 62.5
+	degree, _ := strconv.ParseFloat(os.Args[1], 32)
+	iter, _ := strconv.ParseInt(os.Args[2], 10, 32)
+	scale, _ := strconv.ParseFloat(os.Args[3], 32)
+	fmt.Println(os.Args[:])
+
 	rad := degree * (math.Pi / 180)
-	for i := 1; i < 80; i++ {
+	for i := 1; i < int(iter); i++ {
 		Bresenham(img, x1+width/2, y1+height/2, x2+width/2, y2+height/2, color.Black)
 		x1t = x1 - x2
 		y1t = y1 - y2
 		x2t = int((float64(x1t)*math.Cos(rad)-float64(y1t)*math.Sin(rad))*100) / 100
 		y2t = int((float64(x1t)*math.Sin(rad)+float64(y1t)*math.Cos(rad))*100) / 100
 		//if i%2==0 {
-		x2t = x2t * (7 + i) / (6 + i)
-		y2t = y2t * (7 + i) / (6 + i)
+		x2t = x2t * (7 + i) / (6 + i) * int(scale/100)
+		y2t = y2t * (7 + i) / (6 + i) * int(scale/100)
 		//}
 		x1 = x2
 		y1 = y2
