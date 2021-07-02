@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	//"./bresenham"
 	"image"
 	"image/color"
@@ -12,17 +11,18 @@ import (
 
 func main() {
 
-	x1 := -10
-	x2 := 0
-	x3 := 10
-	y1 := -10
-	y2 := 10
-	y3 := -10
-	var x1t, x2t, x3t, y1t, y2t, y3t int
+	x1 := -15
+	x2 := 15
+	//x3 := 10
+	y1 := -15
+	y2 := 15
+	//y3 := -10
+	var x1t, x2t, y1t, y2t /*, x3t, y3t*/ int
 
-	img := image.NewRGBA(image.Rect(0, 0, 1000, 1000))
-	for y := 0; y <= 1000; y++ {
-		for x := 0; x <= 1000; x++ {
+	height, width := 300, 300
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
+	for y := 0; y <= height; y++ {
+		for x := 0; x <= width; x++ {
 			img.Set(x, y, color.White)
 		}
 	}
@@ -36,41 +36,56 @@ func main() {
 			//fmt.Println(fmt.Sprint(int(math.Sin(i)*40+100)))
 		}
 	*/
-	degree := 10.0
+	degree := 62.5
 	rad := degree * (math.Pi / 180)
-	for j := 1; j < 55; j++ {
-		Bresenham(img, x1+500, y1+500, x2+500, y2+500, color.Black)
-		Bresenham(img, x2+500, y2+500, x3+500, y3+500, color.Black)
-		Bresenham(img, x3+500, y3+500, x1+500, y1+500, color.Black)
-
-		Bresenham(img, x1+501, y1+501, x2+501, y2+501, color.Black)
-		Bresenham(img, x2+501, y2+501, x3+501, y3+501, color.Black)
-		Bresenham(img, x3+501, y3+501, x1+501, y1+501, color.Black)
-
-		Bresenham(img, x1+502, y1+502, x2+502, y2+502, color.Black)
-		Bresenham(img, x2+502, y2+502, x3+502, y3+502, color.Black)
-		Bresenham(img, x3+502, y3+502, x1+502, y1+502, color.Black)
-
-		x1t = int((float64(x1)*math.Cos(rad)-float64(y1)*math.Sin(rad))*100) / 100
-		y1t = int((float64(x1)*math.Sin(rad)+float64(y1)*math.Cos(rad))*100) / 100
-
-		x2t = int((float64(x2)*math.Cos(rad)-float64(y2)*math.Sin(rad))*100) / 100
-		y2t = int((float64(x2)*math.Sin(rad)+float64(y2)*math.Cos(rad))*100) / 100
-
-		x3t = int((float64(x3)*math.Cos(rad)-float64(y3)*math.Sin(rad))*100) / 100
-		y3t = int((float64(x3)*math.Sin(rad)+float64(y3)*math.Cos(rad))*100) / 100
-
-		fmt.Println(x1, " ", x1t, " ", y1, " ", y1t)
-		fmt.Println(x2, " ", x2t, " ", y2, " ", y2t)
-
-		x1 = int(float64(x1t)*(1.25)*100) / 100
-		x2 = int(float64(x2t)*(1.25)*100) / 100
-		y1 = int(float64(y1t)*(1.25)*100) / 100
-		y2 = int(float64(y2t)*(1.25)*100) / 100
-		x3 = int(float64(x3t)*(1.25)*100) / 100
-		y3 = int(float64(y3t)*(1.25)*100) / 100
+	for i := 1; i < 80; i++ {
+		Bresenham(img, x1+width/2, y1+height/2, x2+width/2, y2+height/2, color.Black)
+		x1t = x1 - x2
+		y1t = y1 - y2
+		x2t = int((float64(x1t)*math.Cos(rad)-float64(y1t)*math.Sin(rad))*100) / 100
+		y2t = int((float64(x1t)*math.Sin(rad)+float64(y1t)*math.Cos(rad))*100) / 100
+		//if i%2==0 {
+		x2t = x2t * (7 + i) / (6 + i)
+		y2t = y2t * (7 + i) / (6 + i)
+		//}
+		x1 = x2
+		y1 = y2
+		x2 = x2t + x2
+		y2 = y2t + y2
 	}
+	/*	for j := 1; j < 55; j++ {
+			Bresenham(img, x1+500, y1+500, x2+500, y2+500, color.Black)
+			Bresenham(img, x2+500, y2+500, x3+500, y3+500, color.Black)
+			Bresenham(img, x3+500, y3+500, x1+500, y1+500, color.Black)
 
+			Bresenham(img, x1+501, y1+501, x2+501, y2+501, color.Black)
+			Bresenham(img, x2+501, y2+501, x3+501, y3+501, color.Black)
+			Bresenham(img, x3+501, y3+501, x1+501, y1+501, color.Black)
+
+			Bresenham(img, x1+502, y1+502, x2+502, y2+502, color.Black)
+			Bresenham(img, x2+502, y2+502, x3+502, y3+502, color.Black)
+			Bresenham(img, x3+502, y3+502, x1+502, y1+502, color.Black)
+
+			x1t = int((float64(x1)*math.Cos(rad)-float64(y1)*math.Sin(rad))*100) / 100
+			y1t = int((float64(x1)*math.Sin(rad)+float64(y1)*math.Cos(rad))*100) / 100
+
+			x2t = int((float64(x2)*math.Cos(rad)-float64(y2)*math.Sin(rad))*100) / 100
+			y2t = int((float64(x2)*math.Sin(rad)+float64(y2)*math.Cos(rad))*100) / 100
+
+			x3t = int((float64(x3)*math.Cos(rad)-float64(y3)*math.Sin(rad))*100) / 100
+			y3t = int((float64(x3)*math.Sin(rad)+float64(y3)*math.Cos(rad))*100) / 100
+
+			fmt.Println(x1, " ", x1t, " ", y1, " ", y1t)
+			fmt.Println(x2, " ", x2t, " ", y2, " ", y2t)
+
+			x1 = int(float64(x1t)*(1.25)*100) / 100
+			x2 = int(float64(x2t)*(1.25)*100) / 100
+			y1 = int(float64(y1t)*(1.25)*100) / 100
+			y2 = int(float64(y2t)*(1.25)*100) / 100
+			x3 = int(float64(x3t)*(1.25)*100) / 100
+			y3 = int(float64(y3t)*(1.25)*100) / 100
+		}
+	*/
 	/*
 		for j:=1; j<9; j++ {
 
