@@ -1,1 +1,2 @@
-module "bresenham"
+
+module github.com/StephaneBunel/bresenham

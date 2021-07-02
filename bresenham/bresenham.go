@@ -1,4 +1,4 @@
-package main
+package bresenham
 
 // 2016-10-22, Stéphane Bunel
 //           * Do not use in production. It's just an exercise
